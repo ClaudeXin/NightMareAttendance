@@ -18,9 +18,6 @@ public class MyApp extends Application {
 	}
 
 	public HashMap<String, String> getTeacherInfor() {
-		if (this.teacher_infor != null) {
-			return null;
-		}
 		return this.teacher_infor;
 	}
 }

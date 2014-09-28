@@ -39,6 +39,7 @@ public class LoginActivity extends Activity {
 						"password", str_password };
 				unique_infor.addTeacherInfor(user);
 				Intent intent = new Intent();
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				intent.setClass(getApplicationContext(), InitActivity.class);
 				getApplication().startActivity(intent);
 			}

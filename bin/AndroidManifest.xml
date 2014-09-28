@@ -24,7 +24,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".LoginActivity"
+            android:name="com.claude.mainactivity.LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,11 +33,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.claude.mainactivity.MainActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".InitActivity"
+            android:name="com.claude.mainactivity.InitActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
