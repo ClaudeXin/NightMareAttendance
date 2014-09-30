@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -45,46 +46,37 @@ public class InitActivity extends Activity {
 		this.setContentView(R.layout.activity_init);
 		this.initCompone();
 
-		final ArrayList<NameValuePair> user = new ArrayList<NameValuePair>();
-		user.add(new BasicNameValuePair("account", username));
-		user.add(new BasicNameValuePair("password", password));
 		new Thread() {
 			public void run() {
-				HttpPost post = new HttpPost(conf.getLoginUrl());
 				try {
-					post.setEntity(new UrlEncodedFormEntity(user, HTTP.UTF_8));
-					HttpResponse response = new DefaultHttpClient()
-							.execute(post);
-					if (response.getStatusLine().getStatusCode() == 200) {
-						HttpEntity login_entity = response.getEntity();
-						InputStream stream = login_entity.getContent();
-						BufferedReader reader = new BufferedReader(
-								new InputStreamReader(stream, "utf-8"));
-						FileWriter xmlFile = new FileWriter(conf.getPath()
-								+ getTime() + ".xml");
-						BufferedWriter writer = new BufferedWriter(xmlFile);
-						while (reader.ready()) {
-							writer.write(reader.readLine());
-						}
-						writer.close();
-						reader.close();
-						xmlFile.close();
-						stream.close();
-						handle_login.sendEmptyMessage(0x000);
-					} else {
-						handle_login.sendEmptyMessage(0x001);
+					URL login_xml_file = new URL(
+							getLoginUrl(username, password));
+					InputStream xml_stream = login_xml_file.openStream();
+					BufferedReader login_stream = new BufferedReader(
+							new InputStreamReader(xml_stream));
+					FileWriter login_file = new FileWriter(conf.getPath() + getTime() + ".xml");
+					BufferedWriter writer_file_stream = new BufferedWriter(login_file);
+					while(login_stream.ready()){
+						writer_file_stream.write(login_stream.readLine());
+						writer_file_stream.newLine();
 					}
-				} catch (UnsupportedEncodingException e) {
-					handle_login.sendEmptyMessage(0x001);
-				} catch (ClientProtocolException e) {
-					handle_login.sendEmptyMessage(0x001);
+					writer_file_stream.close();
+					login_stream.close();
+					login_file.close();
+					xml_stream.close();
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
 				} catch (IOException e) {
-					handle_login.sendEmptyMessage(0x001);
+					e.printStackTrace();
 				}
 			}
 		}.start();
 	}
-
+	private String getLoginUrl(String name, String password) {
+		String tmp_url = conf.getLoginUrl();
+		tmp_url += String.format("?account=%s&password=%s", name, password);
+		return tmp_url;
+	}
 	public void initCompone() {
 		unique_infor = (MyApp) getApplication();
 		try {
@@ -94,9 +86,7 @@ public class InitActivity extends Activity {
 			this.startActivity(new Intent().setClass(getApplicationContext(),
 					LoginActivity.class));
 		}
-
 	}
-
 	@SuppressLint("DefaultLocale")
 	private String getTime() {
 		Calendar calendar = Calendar.getInstance();
