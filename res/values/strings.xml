@@ -8,5 +8,8 @@
     <string name="login_user">用户名:</string>
     <string name="login_password">密码:</string>
     <string name="login_btn">登陆</string>
+    <string name="login_mention">手机号或一卡通号</string>
+    <string name="login_text_auto">注册一个</string>
+    <string name="login_regist_link">没有账号？</string>
 
 </resources>
